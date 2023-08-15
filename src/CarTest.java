@@ -1,13 +1,15 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CarTest {
 
     Car car;
     @BeforeEach
-    public void createrCar(){
+    public void createdCar(){
         car = new Car("Lamborghini", "01-Z-225-RB", 2025, "Umidjon Abdukhamidov");
     }
 
@@ -24,8 +26,8 @@ class CarTest {
 
     @Test
     void setNumber() {
-        car.setNumber("01-Z-225-RB");
-        assertEquals("01-Z-225-RB", car.getNumber());
+        car.setNumber("01-Z-222-RB");
+        assertEquals("01-Z-222-RB", car.getNumber());
     }
 
     @Test
@@ -53,5 +55,29 @@ class CarTest {
     void getListOfTwoOwners(){
         car.setOwner("Behruz Abdukhamidov");
         assertArrayEquals(new String[]{"Umidjon Abdukhamidov", "Behruz Abdukhamidov"}, car.getOwners().toArray());
+    }
+
+    // тест для приватных классов
+    @Test
+    public void testPrivateMethod() {
+        try {
+            Method method = Car.class.getDeclaredMethod("testMethod", null);
+            method.setAccessible(true);
+            assertEquals("abc", method.invoke(car).toString() );
+        } catch (Exception e) {
+            e.printStackTrace(); // показывает ошибки кода
+        }
+    }
+
+    // с аргументом
+    @Test
+    public void testPrivateMethodWithArgument() {
+        try {
+            Method method = Car.class.getDeclaredMethod("testMethod", String.class);
+            method.setAccessible(true);
+            assertEquals("abc", method.invoke(car, "abd").toString());
+        } catch (Exception e) {
+            e.printStackTrace(); // показывает ошибки кода
+        }
     }
 }
